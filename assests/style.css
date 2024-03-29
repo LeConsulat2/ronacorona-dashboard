@@ -1,0 +1,11 @@
+table tbody::-webkit-scrollbar {
+    display: none;
+    }
+    
+    table tbody {
+    max-height: 50vh;
+    display: block;
+    overflow: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    }

@@ -1,37 +1,64 @@
+from dash import Dash, html, dcc
+from builders import make_table
+from data import countries_df
+import plotly.express as px
 import pandas as pd
 
+stylesheets = [
+    "https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css", 
+    "https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+    
+]
+
+app = Dash(__name__, external_stylesheets=stylesheets)
+
+bubble_map = fig = px.scatter_geo(
+    countries_df, 
+    size="Confirmed",
+    size_max=40,
+    hover_name="Country_Region",
+    color="Confirmed", 
+    locationmode="country names",
+    locations="Country_Region", 
+    template="plotly_dark",
+    hover_data={
+        "Confirmed": ":,.2f",
+        "Recovered": ":,.2f",
+        "Deaths": ":,.2f",
+        "Country_Region": False
+    }
+)
 
 
-def global_df(condition):
-    df = pd.read_csv(f"data/time_{condition}.csv")
-    df = (
-        df.drop(["Province/State", "Country/Region", "Lat", "Long"], axis=1).sum().reset_index(name=condition)
-    )
-    df = df.rename(columns={'index': 'date'})
-    return df
+app.layout = html.Div(
+    style={
+        "minHeight": "100vh", 
+        "backgroundColor": "black", 
+        "color": "white", 
+        "fontFamily": "Open Sans, sans-serif"
+    },
+    children=[
+        html.Header(
+            style={"textAlign": "center", "paddingTop": "50px"}, 
+            children=[html.H1("Corona Dashboard", style={"fontSize":40})]
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Graph(figure=bubble_map),  # Placeholder for the graph, you need to provide the actual graph component
+                        make_table(countries_df)                       
+                    ]
+                )
+            ]
+        )    
+    ]
+)
 
-daily_df = pd.read_csv("data/daily_report.csv")
-
-totals_df = daily_df (
-    [["Confirmed", "Deaths", "Recovered"]].sum().reset_index(name="count")
-)    
-totals_df = totals_df.rename(columns={'index': "condition"})
+map_figure = px.scatter_geo(countries_df)
+map_figure.show()
 
 
 
-countries_df = daily_df [["Country_Region", "Confirmed", "Deaths", "Recovered"]]
-countries_df = daily_df.groupby("Country_Region").sum().reset_index()
-
-conditions = ["confirmed", "deaths", "recovered"]
-
-
-
-final_df = None
-
-for condition in conditions:
-    condition_df = make_df(condition)
-    if final_df is None:
-        final_df = condition_df
-    else:
-        final_df = final_df.merge(condition_df)
-
+if __name__ == '__main__':
+    app.run_server(debug=True)
