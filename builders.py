@@ -4,7 +4,7 @@ from dash import Dash, html, dcc
 def make_table(df):
     return html.Table(
         children=[
-            html.Thead(style={"display": "block", "marginBottom": 25},
+            html.Thead(style={"display": "block", "marginBottom": 30},
                 children=[
                     html.Tr(
                         children=[
@@ -14,7 +14,7 @@ def make_table(df):
                             "display": "grid",
                             "gridTemplateColumns": "repeat(4, 1fr)",
                             "fontWeight": "600",
-                            "fontSize": 18,
+                            "fontSize": 15,
                         },
                     )
                 ],
@@ -27,6 +27,7 @@ def make_table(df):
                             "gridTemplateColumns": "repeat(4, 1fr)",
                             "border-top": "1px solid white",
                             "padding": "30px 0px",
+                            "backgroundColor": "black"
                         },
                         children=[html.Td(value_column) for value_column in value]
                     ) for value in df.values
