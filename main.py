@@ -15,8 +15,13 @@ stylesheets = [
     "https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap",
 ]
 
+
+
 # Initialize Dash app
 app = Dash(__name__, external_stylesheets=stylesheets)
+
+server = app.server
+
 
 # Create bubble map figure
 bubble_map = px.scatter_geo(
@@ -128,5 +133,3 @@ def update_country_graph(value):
     fig["data"][2]["line"]["color"] = "#27ae60"
     return fig
 
-if __name__ == "__main__":
-    app.run_server(debug=True)
