@@ -2,7 +2,7 @@ import pandas as pd
 
 conditions = ["confirmed", "deaths", "recovered"]
 
-daily_df = pd.read_csv("data/daily_report.csv")
+daily_df = pd.read_csv("Data/daily_report.csv")
 
 totals_df = (daily_df[["Confirmed", "Deaths", "Recovered"]].sum().reset_index(name="count"))
 totals_df = totals_df.rename(columns={'index': "condition"})
